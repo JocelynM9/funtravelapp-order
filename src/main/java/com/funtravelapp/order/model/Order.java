@@ -11,10 +11,10 @@ public class Order {
     private int orderId;
 
     @Column(name = "package_id")
-    private int packageId;
+    private Integer packageId;
 
     @Column(name = "user_id")
-    private int userId;
+    private Integer userId;
 
     @Column(name = "email")
     private String email;
@@ -30,12 +30,16 @@ public class Order {
         this.orderId = orderId;
     }
 
-    public int getPackageId() {
+    public Integer getPackageId() {
         return packageId;
     }
 
-    public void setPackageId(int packageId) {
+    public void setPackageId(Integer packageId) {
         this.packageId = packageId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public int getUserId() {

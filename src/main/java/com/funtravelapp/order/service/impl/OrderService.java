@@ -1,14 +1,15 @@
-package com.funtravelapp.order.service;
+package com.funtravelapp.order.service.impl;
 
 import com.funtravelapp.order.model.Order;
 import com.funtravelapp.order.repository.OrderRepository;
+import com.funtravelapp.order.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
-public class OrderService implements IOrderService{
+public class OrderService implements IOrderService {
     @Autowired
     OrderRepository repository;
 
@@ -25,11 +26,12 @@ public class OrderService implements IOrderService{
 
     @Override
     public Order findTheOrder(Order order) {
-        return null;
+        return repository.findByOrderId(order.getOrderId());
     }
 
     @Override
-    public List<Order> allOrdersByUserId() {
-        return null;
+    public ResponseEntity<?> allOrdersByUserId(int userId) {
+        return new ResponseEntity<>(repository.findAllByUserId(userId), HttpStatus.OK);
     }
+
 }
