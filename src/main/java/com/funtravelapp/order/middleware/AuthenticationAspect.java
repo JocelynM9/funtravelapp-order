@@ -52,7 +52,7 @@ public class AuthenticationAspect {
                 .build();
         Map<String, Boolean> allowedUser = (Map<String, Boolean>) args[1];
 
-        if (!allowedUser.get(u.getData().getRole().toLowerCase())){
+        if (allowedUser.get(u.getData().getRole().toLowerCase()) == null){
             throw new Exception("Unauthorized, user not allowed!");
         }
 

@@ -17,11 +17,12 @@ public class OrderController {
     @Autowired
     RoleService roleService;
 
-    @KafkaListener(
-            topics = "CreateOrder",
-            groupId = "CreateOrder-1"
-    )
-    public void addNewOrder(String data){
+//    @KafkaListener(
+//            topics = "CreateOrder",
+//            groupId = "CreateOrder-1"
+//    )
+    @PostMapping("/create")
+    public void addNewOrder(@RequestBody String data){
         orderService.insert(data);
     }
 

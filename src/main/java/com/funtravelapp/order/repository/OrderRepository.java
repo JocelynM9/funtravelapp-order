@@ -11,17 +11,11 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
-    Order findByOrderId(Integer i);
+    List<Order> findByCustomerId(Integer customerId);
 
-    @Query("SELECT o from Order o WHERE o.customerId= ?1")
-    List<Order> findAllByCustomerId(int customerId);
-
-    @Query("SELECT o from Order o WHERE o.sellerId= ?1")
-    List<Order> findAllBySellerId(int sellerId);
-    @Query("SELECT o from Order o WHERE o.customerId= ?1 AND o.chainingId = ?2")
-    List<Order> findAllByCustomerIdAndChainingId(int customerId, String chainingId);
-    @Query("SELECT o from Order o WHERE o.sellerId= ?1 AND o.chainingId = ?2")
-    List<Order> findAllBySellerIdAndChainingId(int sellerId, String chainingId);
+    List<Order> findBySellerId(Integer sellerId);
+    List<Order> findByCustomerIdAndChainingId(Integer customerId, String chainingId);
+    List<Order> findBySellerIdAndChainingId(Integer sellerId, String chainingId);
     List<Order> findByChainingId(String chainingId);
 
     @Modifying

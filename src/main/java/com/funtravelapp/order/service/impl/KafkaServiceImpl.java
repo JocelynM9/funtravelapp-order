@@ -11,14 +11,13 @@ import org.springframework.stereotype.Service;
 public class KafkaServiceImpl implements KafkaService {
 
     @Autowired
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public KafkaServiceImpl(KafkaTemplate<String, Object> kafkaTemplate) {
+    public KafkaServiceImpl(KafkaTemplate<String, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
     @Override
-    @KafkaListener(topics = "CreateOrder")
     public void consumeCart(CreateOrderDTO dto) {
         System.out.println("Received new order : " + dto);
     }

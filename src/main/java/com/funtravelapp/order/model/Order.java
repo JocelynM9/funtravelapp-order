@@ -6,17 +6,17 @@ import lombok.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "order")
-@Getter
-@Setter
+@Table(name = "orders")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Getter
+@Setter
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_id")
-    private Integer orderId;
+    @Column(name = "id")
+    private Integer id;
 
     @Column(name = "package_id")
     private Integer packageId;

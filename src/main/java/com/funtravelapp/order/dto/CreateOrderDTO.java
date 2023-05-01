@@ -25,9 +25,7 @@ public class CreateOrderDTO {
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class OrderData{
         private Integer customerId;
-
         private Integer sellerId;
-
         private Integer packageId;
         private BigDecimal price;
         private String customerEmail;

@@ -27,12 +27,9 @@ public class OrderService implements IOrderService {
     @Autowired
     OrderRepository repository;
     @Autowired
-    KafkaTemplate<String, Object> kafkaTemplate;
+    KafkaTemplate<String, String> kafkaTemplate;
     @Autowired
     KafkaTopicsConfig kafkaTopicConfig;
-    @Autowired
-    KafkaService kafkaService;
-
 
     @Override
     public void insert(String data) {
@@ -52,6 +49,7 @@ public class OrderService implements IOrderService {
             BigDecimal totalPrice = new BigDecimal("0");
             for (CreateOrderDTO.OrderData pkg :
                     msg.getData()) {
+                System.out.println(pkg);
                 aOrder = Order.builder()
                         .packageId(pkg.getPackageId())
                         .customerId(pkg.getCustomerId())
@@ -65,6 +63,7 @@ public class OrderService implements IOrderService {
                 orders.add(aOrder);
                 totalPrice = totalPrice.add(pkg.getPrice());
             }
+            System.out.println(uid);
             repository.saveAll(orders);
             CreatePaymentDTO createPaymentDTO = CreatePaymentDTO.builder()
                     .chainingId(uid)
@@ -126,11 +125,11 @@ public class OrderService implements IOrderService {
     @Override
     public List<Order> readByUserId(String authorizationHeader, Map<String, Boolean> roles, User user) {
         List<Order> orders;
-
+        System.out.println(user);
         if (user.getRole().equalsIgnoreCase("customer")){
-            orders = repository.findAllByCustomerId(user.getId());
+            orders = repository.findByCustomerId(user.getId());
         }else {
-            orders = repository.findAllBySellerId(user.getId());
+            orders = repository.findBySellerId(user.getId());
         }
         return orders;
     }
@@ -140,9 +139,9 @@ public class OrderService implements IOrderService {
         List<Order> orders;
 
         if (user.getRole().equalsIgnoreCase("customer")){
-            orders = repository.findAllByCustomerIdAndChainingId(user.getId(), chainingId);
+            orders = repository.findByCustomerIdAndChainingId(user.getId(), chainingId);
         }else {
-            orders = repository.findAllBySellerIdAndChainingId(user.getId(), chainingId);
+            orders = repository.findBySellerIdAndChainingId(user.getId(), chainingId);
         }
         return orders;
     }
