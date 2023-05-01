@@ -8,21 +8,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("order")
 public class OrderController {
     @Autowired
     IOrderService orderService;
 
-    @PostMapping("/add")
+    @PostMapping("/new")
     public ResponseEntity<String> addNewOrder(@RequestBody OrderDTO orderDTO){
-        Order order = new Order();
-        order.setOrderId(0);
-        order.setPackageId(orderDTO.getPackageId());
-        order.setUserId(orderDTO.getUserId());
-        orderService.insert(order);
+
+        orderService.insert(orderDTO);
         return new ResponseEntity<>("New Order has been created!", HttpStatus.OK);
     }
 
@@ -33,13 +28,18 @@ public class OrderController {
         return orderService.findTheOrder(order);
     }
 
-    @GetMapping("/getOrderByUser")
-    public ResponseEntity<?> getOrderByUser(@RequestParam("userId") int id){
-        return orderService.allOrdersByUserId(id);
+    @GetMapping("/getOrderByCustomer")
+    public ResponseEntity<?> getOrderByCustomer(@RequestParam("customerId") Integer id){
+        return orderService.allOrdersByCustomerId(id);
+    }
+
+    @GetMapping("/getOrderBySeller")
+    public ResponseEntity<?> getOrderBySeller(@RequestParam("sellerId") Integer id){
+        return orderService.allOrdersBySellerId(id);
     }
 
 //    @PutMapping("/update")
-//    public ResponseEntity<String> updateOrder(@RequestParam("order_id") int orderId,
+//    public ResponseEntity<String> updateStatusOrder(@RequestParam("order_id") int orderId,
 //                                              @RequestParam("status") String status){
 //
 //        return ;

@@ -1,39 +1,23 @@
 package com.funtravelapp.order.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
 public class OrderDTO {
 
     @JsonProperty("package_id")
     private Integer packageId;
 
-    @JsonProperty("user_id")
-    private Integer userId;
+    @JsonProperty("customer_id")
+    private Integer customerId;
 
-    @JsonProperty("status")
-    private String status;
+    @JsonProperty("seller_id")
+    private Integer sellerId;
 
-    public Integer getPackageId() {
-        return packageId;
-    }
+    @JsonProperty("email")
+    private String email;
 
-    public void setPackageId(Integer packageId) {
-        this.packageId = packageId;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 }

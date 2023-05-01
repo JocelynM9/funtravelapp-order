@@ -1,9 +1,19 @@
 package com.funtravelapp.order.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "order")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,56 +23,29 @@ public class Order {
     @Column(name = "package_id")
     private Integer packageId;
 
-    @Column(name = "user_id")
-    private Integer userId;
+    @Column(name = "customer_id")
+    private Integer customerId;
+
+    @Column(name = "seller_id")
+    private Integer sellerId;
+
+    @Column(name = "chaining_id")
+    private String chainingId;
+
+    @Column(name = "customer_acc")
+    private String customerAcc;
+
+    @Column(name = "seller_acc")
+    private String sellerAcc;
 
     @Column(name = "email")
     private String email;
 
+    @Column(name = "price")
+    private BigDecimal price;
+
     @Column(name = "status")
     private String status;
 
-    public int getOrderId() {
-        return orderId;
-    }
 
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
-
-    public Integer getPackageId() {
-        return packageId;
-    }
-
-    public void setPackageId(Integer packageId) {
-        this.packageId = packageId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 }
