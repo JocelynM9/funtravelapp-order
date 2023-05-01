@@ -1,16 +1,14 @@
 package com.funtravelapp.order.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "order")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -18,7 +16,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
-    private int orderId;
+    private Integer orderId;
 
     @Column(name = "package_id")
     private Integer packageId;
@@ -37,15 +35,15 @@ public class Order {
 
     @Column(name = "seller_acc")
     private String sellerAcc;
+    @Column(name = "customer_email")
+    private String customerEmail;
 
-    @Column(name = "email")
-    private String email;
+    @Column(name = "seller_email")
+    private String sellerEmail;
 
     @Column(name = "price")
     private BigDecimal price;
 
     @Column(name = "status")
     private String status;
-
-
 }

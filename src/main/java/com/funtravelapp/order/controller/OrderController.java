@@ -1,11 +1,12 @@
 package com.funtravelapp.order.controller;
 
-import com.funtravelapp.order.dto.OrderDTO;
-import com.funtravelapp.order.model.Order;
+import com.funtravelapp.order.middleware.RoleService;
+import com.funtravelapp.order.responseMapper.ResponseMapper;
 import com.funtravelapp.order.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,37 +14,52 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
     @Autowired
     IOrderService orderService;
+    @Autowired
+    RoleService roleService;
 
-    @PostMapping("/new")
-    public ResponseEntity<String> addNewOrder(@RequestBody OrderDTO orderDTO){
-
-        orderService.insert(orderDTO);
-        return new ResponseEntity<>("New Order has been created!", HttpStatus.OK);
+    @KafkaListener(
+            topics = "CreateOrder",
+            groupId = "CreateOrder-1"
+    )
+    public void addNewOrder(String data){
+        orderService.insert(data);
     }
 
-    @GetMapping("/getOrder")
-    public @ResponseBody Order getOrder(@RequestParam("orderId") int id){
-        Order order = new Order();
-        order.setOrderId(id);
-        return orderService.findTheOrder(order);
+    @KafkaListener(
+            topics = "UpdateStatusOrder",
+            groupId = "UpdateStatusOrder-1"
+    )
+    public void updateStatusOrder(String data){
+        orderService.updateStatusOrder(data);
     }
 
-    @GetMapping("/getOrderByCustomer")
-    public ResponseEntity<?> getOrderByCustomer(@RequestParam("customerId") Integer id){
-        return orderService.allOrdersByCustomerId(id);
+    @GetMapping("")
+    public ResponseEntity<?> readByUserId(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader){
+        try{
+            return ResponseMapper.ok(null, orderService.readByUserId(authorizationHeader, this.roleService.getCustomerAndSeller(), null));
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseMapper.badRequest(e.getMessage(), null);
+        }
     }
 
-    @GetMapping("/getOrderBySeller")
-    public ResponseEntity<?> getOrderBySeller(@RequestParam("sellerId") Integer id){
-        return orderService.allOrdersBySellerId(id);
+    @GetMapping("/{chainingId}")
+    public ResponseEntity<?> readByChainingId(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader, @PathVariable("chainingId") String chainingId){
+        try{
+            return ResponseMapper.ok(null, orderService.readByChainingId(authorizationHeader, this.roleService.getCustomerAndSeller(), null, chainingId));
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseMapper.badRequest(e.getMessage(), null);
+        }
     }
 
-//    @PutMapping("/update")
-//    public ResponseEntity<String> updateStatusOrder(@RequestParam("order_id") int orderId,
-//                                              @RequestParam("status") String status){
-//
-//        return ;
-//    }
-
-
+    @PostMapping("/confirm-order/{chainingId}")
+    public ResponseEntity<?> confirmOrder(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader, @PathVariable("chainingId") String chainingId){
+        try{
+            return ResponseMapper.ok(null, orderService.confirmOrder(authorizationHeader, this.roleService.getSeller(), null, chainingId));
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseMapper.badRequest(e.getMessage(), null);
+        }
+    }
 }
