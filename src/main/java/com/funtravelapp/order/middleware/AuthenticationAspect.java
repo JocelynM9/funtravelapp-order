@@ -9,6 +9,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -39,24 +40,14 @@ public class AuthenticationAspect {
             throw new Exception("Unauthorized, invalid token");
         }
 
-//        GetTokenResponse user = getTokenAPI.getToken(authHeader);
-        GetTokenResponse u = GetTokenResponse.builder()
-                .data(User.builder()
-                        .id(1)
-                        .email("user@gmail.com")
-                        .expiredToken("2023-01-01")
-                        .role("customer")
-                        .username("admin")
-                        .token("123")
-                        .build())
-                .build();
+        GetTokenResponse user = getTokenAPI.getToken(authHeader);
         Map<String, Boolean> allowedUser = (Map<String, Boolean>) args[1];
 
-        if (allowedUser.get(u.getData().getRole().toLowerCase()) == null){
+        if (allowedUser.get(user.getData().getRole().toLowerCase()) == null){
             throw new Exception("Unauthorized, user not allowed!");
         }
 
-        args[2] = u.getData();
+        args[2] = user.getData();
 
         return pjp.proceed(args);
     }
